@@ -22,7 +22,7 @@ char *html; // Temp variable with latest html buffer
 HTMLSTREAMPARSER *hsp;
 
 char *baseurl;
-char hrefs[2048*10] = "";
+char hrefs[8192] = "";
 
    
 /*in this part,HTML file saving and web-links extraction are realised. The web-links stored in HTML are indicated by a herf, so we can compare the string data to get the web-links*/
@@ -46,6 +46,7 @@ static size_t write_callback(char *buffer, size_t size, size_t nmemb, HTMLSTREAM
 				{ 
 					html_parser_val(hsp)[html_parser_val_length(hsp)] = '\0';
 					//printf("%s\n",html_parser_val(hsp));
+
 					if(html_parser_val(hsp)[0] == '/') {
 						strcat(hrefs, baseurl); 
 					}
@@ -57,7 +58,7 @@ static size_t write_callback(char *buffer, size_t size, size_t nmemb, HTMLSTREAM
 					//fwrite(html_parser_val(hsp),html_parser_val_length(hsp),1,(FILE *)tmp2);
 					//fwrite("\n",1,1,(FILE *)tmp2);
 				} 
-	}		
+	}	
 	return realsize;
 } 
 
@@ -129,9 +130,9 @@ char* GetLinksFromWebPage(char *myhtmlpage, char *myurl) {
 int main(int argc, char *argv[])
 {   
     /*set the path to save the html file*/
-	tmp1=fopen("/tmp/htmldata.html", "w");
+	tmp1=fopen("htmldata.html", "w");
 	/*set the path to save the extracted web-links*/
-	tmp2=fopen("/tmp/weblinksdata.html", "w");
+	tmp2=fopen("weblinksdata.html", "w");
 	/*set the URL address to download*/	
 	//char URL[]="http://www.liacs.nl/~mlew"; 
 
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
 	//Download_URL(argv[1],hsp);
 
 	//GetWebPage(argv[1]);
-	GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
+	//GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]);
 	printf("%s", GetLinksFromWebPage(GetWebPage(argv[1]), argv[1]));
 
 	//release the hsp
